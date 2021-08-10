@@ -1,0 +1,97 @@
+class Grabado {  
+    private final static Double PRECIOBASE = 350.0;
+    private final static Integer ANTIGUEDAD = 50;
+    private final static Boolean AUTENTICADO = false;
+    private Integer antiguedad;
+    private Boolean autenticado;
+    private Double precioBase;
+
+    public Grabado() {
+        this.antiguedad = ANTIGUEDAD;
+        this.autenticado = false;
+        this.precioBase = PRECIOBASE;
+    }
+
+    public Grabado(Integer antiguedad, Boolean autenticado, Double precioBase) {
+        this.antiguedad = antiguedad;
+        this.autenticado = autenticado;
+        this.precioBase = precioBase;
+    }
+
+    public Double calcularPrecio() {
+        Double precioFinal = this.precioBase;
+        if (this.antiguedad >= 50 && this.antiguedad <= 70){precioFinal = precioBase * 1.1;}
+        else if (this.antiguedad > 70 && this.antiguedad <= 120){precioFinal = precioBase * 1.25;}
+        else if (this.antiguedad > 120){precioFinal = precioBase * 1.4;}
+        
+        if (this.autenticado == true){precioFinal = precioFinal + 800;}
+        return precioFinal;
+    }
+}
+
+//-------------------------------------
+
+public class Relieve extends Grabado{
+    private Boolean linografia;
+
+    public Relieve(Integer antiguedad, Boolean autenticado, Double precioBase, Boolean linografia) {
+        super(antiguedad, autenticado, precioBase);
+        this.linografia = linografia;
+    }
+    @Override
+    public Double calcularPrecio() {
+        double precioFinal = super.calcularPrecio();
+        if (this.linografia == true){precioFinal += 700;}
+        return precioFinal;
+    }
+}
+
+//-------------------------------------
+
+public class Plano extends Grabado{
+    private String procedimiento;
+
+    public Plano(Integer antiguedad, Boolean autenticado, Double precioBase, String procedimiento) {
+        super(antiguedad, autenticado, precioBase);
+        this.procedimiento = procedimiento;
+    }
+
+    @Override
+    public Double calcularPrecio() {
+        Double precioFinal = super.calcularPrecio();
+        if      (this.procedimiento == "SERIGRAFIA") {precioFinal = precioFinal + 700.;}
+        else if (this.procedimiento == "MONOPATIA")  {precioFinal = precioFinal + 300.;}
+        else if (this.procedimiento == "LITOGRAFIA") {precioFinal = precioFinal + 100.;}
+        return precioFinal;
+    }
+}
+
+//-------------------------------------
+
+public class ValorTotal {
+    public Double ValorTotalGrabados = 0.0;
+    public Double ValorTotalGrabadosRelieve = 0.0;
+    public Double ValorTotalGrabadosPlano = 0.0;
+    public Double Total = 0.0;
+    private Grabado[] listaGrabados;
+
+    public ValorTotal(Grabado[] listaGrabados) {
+        this.listaGrabados = listaGrabados;
+    }
+    
+    public void mostrarTotales(){
+        for (Grabado grabado : listaGrabados) {
+            if (grabado.getClass().getName() == "Grabado"){ValorTotalGrabados += grabado.calcularPrecio();}
+            else if (grabado.getClass().getName() == "Relieve"){ValorTotalGrabadosRelieve += grabado.calcularPrecio();}
+            else if (grabado.getClass().getName() == "Plano"){ValorTotalGrabadosPlano += grabado.calcularPrecio();}
+        }
+        Total = this.ValorTotalGrabados + this.ValorTotalGrabadosRelieve + this.ValorTotalGrabadosPlano;
+
+
+        System.out.println(Math.round(ValorTotalGrabados));
+        System.out.println(Math.round(ValorTotalGrabadosRelieve));
+        System.out.println(Math.round(ValorTotalGrabadosPlano));
+        System.out.println(Math.round(Total));
+
+    }
+}
